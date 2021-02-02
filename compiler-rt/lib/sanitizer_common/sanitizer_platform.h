@@ -335,6 +335,12 @@
 #define SANITIZER_NLDBL_VERSION "GLIBC_2.4"
 #endif
 
+// On linux, we need a recent regexec implementation that supports
+// a non-POSIX flag REG_STARTEND.
+#if SANITIZER_LINUX
+#define SANITIZER_REGEXEC_VERSION "GLIBC_2.3.4"
+#endif
+
 #if SANITIZER_GO == 0
 # define SANITIZER_GO 0
 #endif

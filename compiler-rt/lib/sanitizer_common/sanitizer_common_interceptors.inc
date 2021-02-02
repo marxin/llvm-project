@@ -7777,9 +7777,18 @@ INTERCEPTOR(void, regfree, const void *preg) {
     COMMON_INTERCEPTOR_READ_RANGE(ctx, preg, struct_regex_sz);
   REAL(regfree)(preg);
 }
+
+#ifdef SANITIZER_REGEXEC_VERSION
+#define COMMON_INTERCEPT_FUNCTION_REGEXEC(fn)                          \
+    COMMON_INTERCEPT_FUNCTION_VER(fn, SANITIZER_REGEXEC_VERSION)
+#else
+#define COMMON_INTERCEPT_FUNCTION_REGEXEC(fn)                          \
+    COMMON_INTERCEPT_FUNCTION(fn)
+#endif
+
 #define INIT_REGEX                                                             \
   COMMON_INTERCEPT_FUNCTION(regcomp);                                          \
-  COMMON_INTERCEPT_FUNCTION(regexec);                                          \
+  COMMON_INTERCEPT_FUNCTION_REGEXEC(regexec);                                  \
   COMMON_INTERCEPT_FUNCTION(regerror);                                         \
   COMMON_INTERCEPT_FUNCTION(regfree);
 #else
